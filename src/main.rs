@@ -9,16 +9,16 @@ mod errors;
 fn main() {
     rocket::ignite()
         .attach(fairings::RequestTimer)
+        .register(
+            catchers![
+                errors::not_found,
+                errors::internal_server_error],
+        )
         .mount("/", routes![
             handlers::index, 
             handlers::json, 
             handlers::big_json, 
             handlers::time_now,
         ])
-        .register(
-            catchers![
-                errors::not_found,
-                errors::internal_server_error],
-        )
         .launch();
 }

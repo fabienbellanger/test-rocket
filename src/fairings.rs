@@ -32,7 +32,6 @@ impl Fairing for RequestTimer {
         if let Some(Ok(duration)) = start_time.0.map(|st| st.elapsed()) {
             let ms = duration.as_secs() * 1000 + duration.subsec_millis() as u64;
             response.set_raw_header("X-Response-Time", format!("{} ms", ms));
-            println!("    => Elapsed time: {} ms", ms);
         }
     }
 }
