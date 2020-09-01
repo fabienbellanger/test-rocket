@@ -1,8 +1,8 @@
 extern crate chrono;
 
+use chrono::prelude::*;
 use rocket_contrib::json::Json;
 use serde::Serialize;
-use chrono::prelude::*;
 use std::time::Duration;
 
 #[derive(Serialize)]
@@ -20,9 +20,9 @@ pub fn index() -> &'static str {
 
 #[get("/json")]
 pub fn json() -> Json<Task> {
-    Json(Task{
-        id: 12, 
-        name: "Coucou ceci est mon nom", 
+    Json(Task {
+        id: 12,
+        name: "Coucou ceci est mon nom",
         message: String::from("Mon message doit être un peu long pour augmenter la taille"),
     })
 }
@@ -31,9 +31,9 @@ pub fn json() -> Json<Task> {
 pub fn big_json() -> Json<Vec<Task>> {
     let mut v: Vec<Task> = Vec::new();
     for i in 0..10_000 {
-        v.push(Task{
-            id: i, 
-            name: "Coucou ceci est mon nom", 
+        v.push(Task {
+            id: i,
+            name: "Coucou ceci est mon nom",
             message: String::from("Mon message doit être un peu long pour augmenter la taille"),
         });
     }
