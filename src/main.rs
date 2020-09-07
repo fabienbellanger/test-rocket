@@ -18,6 +18,7 @@ fn main() {
                 handlers::json,
                 handlers::big_json,
                 handlers::time_now,
+                handlers::big_json_stream,
             ],
         )
         .launch();
