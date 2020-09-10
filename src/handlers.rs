@@ -4,7 +4,7 @@ use chrono::prelude::*;
 use rocket_contrib::json::Json;
 use serde::Serialize;
 use std::time::Duration;
-use std::io::{Cursor, Read, Seek, SeekFrom};
+use std::io::{Cursor, Read};
 use serde_json;
 use rocket::request::Request;
 use rocket::response::{self, Response, Responder};
@@ -112,15 +112,9 @@ impl Read for UsersStream {
 impl<'r> Responder<'r> for UsersStream {
     fn respond_to(self, _: &Request) -> response::Result<'r> {
         Response::build()
-            .sized_body(self)
+            .streamed_body(self)
             .header(ContentType::new("application", "json"))
             .ok()
-    }
-}
-
-impl Seek for UsersStream {
-    fn seek(&mut self, pos: SeekFrom) -> std::io::Result<u64> {
-        self.pending.seek(pos)
     }
 }
 
