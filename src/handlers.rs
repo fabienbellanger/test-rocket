@@ -1,14 +1,14 @@
 extern crate chrono;
 
 use chrono::prelude::*;
+use rocket::http::ContentType;
+use rocket::request::Request;
+use rocket::response::{self, Responder, Response};
 use rocket_contrib::json::Json;
 use serde::Serialize;
-use std::time::Duration;
-use std::io::{Cursor, Read};
 use serde_json;
-use rocket::request::Request;
-use rocket::response::{self, Response, Responder};
-use rocket::http::ContentType;
+use std::io::{Cursor, Read};
+use std::time::Duration;
 
 #[derive(Serialize)]
 pub struct Task {
@@ -68,7 +68,12 @@ pub struct UsersStream {
 }
 
 #[derive(Debug)]
-pub enum State { Header, Users, Trailer, Done }
+pub enum State {
+    Header,
+    Users,
+    Trailer,
+    Done,
+}
 
 impl Read for UsersStream {
     fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
@@ -128,10 +133,26 @@ pub fn big_json_stream() -> Result<UsersStream, ()> {
             firstname: String::from("My firstname"),
         });
     }
-    Ok(UsersStream{
+    Ok(UsersStream {
         state: State::Header,
         users: v,
         pos: 0,
         pending: Cursor::new(vec![]),
     })
+}
+
+#[cfg(test)]
+mod test {
+    use crate::rocket;
+    use rocket::http::Status;
+    use rocket::local::Client;
+
+    #[test]
+    fn test_index() {
+        let client = Client::new(crate::rocket()).unwrap();
+        let mut response = client.get("/").dispatch();
+
+        assert_eq!(response.status(), Status::Ok);
+        assert_eq!(response.body_string(), Some("Hello, world!".into()));
+    }
 }

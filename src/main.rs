@@ -7,7 +7,7 @@ mod errors;
 mod fairings;
 mod handlers;
 
-fn main() {
+fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .attach(fairings::RequestTimer)
         .register(catchers![errors::not_found, errors::internal_server_error])
@@ -21,5 +21,8 @@ fn main() {
                 handlers::big_json_stream,
             ],
         )
-        .launch();
+}
+
+fn main() {
+    rocket().launch();
 }
