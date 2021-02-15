@@ -1,6 +1,6 @@
-use std::time::SystemTime;
 use rocket::fairing::{Fairing, Info, Kind};
-use rocket::{Request, Data, Response};
+use rocket::{Data, Request, Response};
+use std::time::SystemTime;
 
 /// Fairing for timing requests.
 pub struct RequestTimer;
@@ -13,7 +13,7 @@ impl Fairing for RequestTimer {
     fn info(&self) -> Info {
         Info {
             name: "Request Timer",
-            kind: Kind::Request | Kind::Response
+            kind: Kind::Request | Kind::Response,
         }
     }
 

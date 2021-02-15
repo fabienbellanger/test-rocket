@@ -1,5 +1,5 @@
-use rocket_contrib::json::Json;
 use rocket::http::Status;
+use rocket_contrib::json::Json;
 use serde::Serialize;
 
 #[derive(Serialize)]
@@ -10,7 +10,7 @@ pub struct HttpErrorMessage {
 
 #[catch(404)]
 pub fn not_found() -> Json<HttpErrorMessage> {
-    Json(HttpErrorMessage{
+    Json(HttpErrorMessage {
         code: Status::NotFound.code,
         message: Status::NotFound.reason,
     })
@@ -18,7 +18,7 @@ pub fn not_found() -> Json<HttpErrorMessage> {
 
 #[catch(500)]
 pub fn internal_server_error() -> Json<HttpErrorMessage> {
-    Json(HttpErrorMessage{
+    Json(HttpErrorMessage {
         code: Status::InternalServerError.code,
         message: Status::InternalServerError.reason,
     })
