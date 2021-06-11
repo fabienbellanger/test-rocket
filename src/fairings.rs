@@ -9,6 +9,7 @@ pub struct RequestTimer;
 #[derive(Copy, Clone)]
 struct TimerStart(Option<SystemTime>);
 
+#[rocket::async_trait]
 impl Fairing for RequestTimer {
     fn info(&self) -> Info {
         Info {
@@ -17,17 +18,11 @@ impl Fairing for RequestTimer {
         }
     }
 
-    /// Stores the start time of the request in request-local state.
-    fn on_request(&self, request: &mut Request, _: &Data) {
-        // Store a `TimerStart` instead of directly storing a `SystemTime`
-        // to ensure that this usage doesn't conflict with anything else
-        // that might store a `SystemTime` in request-local cache.
+    async fn on_request(&self, request: &mut Request<'_>, _: &mut Data<'_>) {
         request.local_cache(|| TimerStart(Some(SystemTime::now())));
     }
 
-    /// Adds a header to the response indicating how long the server took to
-    /// process the request.
-    fn on_response(&self, request: &Request, response: &mut Response) {
+    async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
         let start_time = request.local_cache(|| TimerStart(None));
         if let Some(Ok(duration)) = start_time.0.map(|st| st.elapsed()) {
             let ms = duration.as_secs() * 1000 + duration.subsec_millis() as u64;

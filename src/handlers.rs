@@ -4,7 +4,6 @@ use chrono::prelude::*;
 use rocket::http::ContentType;
 use rocket::request::Request;
 use rocket::response::{self, Responder, Response};
-use rocket_contrib::json::Json;
 use serde::Serialize;
 use serde_json;
 use std::io::{Cursor, Read};
@@ -19,10 +18,10 @@ pub struct Task {
 
 #[get("/")]
 pub fn index() -> &'static str {
-    std::thread::sleep(Duration::from_secs(1));
+    std::thread::sleep(Duration::from_millis(100));
     "Hello, world!"
 }
-
+/*
 #[get("/json")]
 pub fn json() -> Json<Task> {
     Json(Task {
@@ -156,3 +155,4 @@ mod test {
         assert_eq!(response.body_string(), Some("Hello, world!".into()));
     }
 }
+*/
