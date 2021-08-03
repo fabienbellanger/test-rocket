@@ -3,7 +3,7 @@ address = "127.0.0.1"
 port = 8000
 # workers = [number of cpus * 2]
 keep_alive = 10
-log = "normal"
+log = "normal" # off|normal|debug|critical
 #secret_key = [randomly generated at launch]
 limits = { forms = 32768 }
 
@@ -12,7 +12,7 @@ address = "0.0.0.0"
 port = 8000
 # workers = [number of cpus * 2]
 keep_alive = 10
-log = "normal"
+log = "normal" # off|normal|debug|critical
 # secret_key = [randomly generated at launch]
 limits = { forms = 32768 }
 
@@ -21,7 +21,7 @@ address = "0.0.0.0"
 port = 8000
 # workers = [number of cpus * 2]
 keep_alive = 10
-log = "critical"
+log = "critical" # off|normal|debug|critical
 # secret_key = [randomly generated at launch]
 limits = { forms = 32768 }
 

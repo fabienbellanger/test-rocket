@@ -1,12 +1,13 @@
 extern crate chrono;
 
 use chrono::prelude::*;
-use rocket::http::ContentType;
-use rocket::request::Request;
-use rocket::response::{self, Responder, Response};
+// use rocket::http::ContentType;
+// use rocket::request::Request;
+// use rocket::response::{self, Responder, Response};
+use rocket::serde::json::Json;
 use serde::Serialize;
-use serde_json;
-use std::io::{Cursor, Read};
+// use serde_json;
+// use std::io::{Cursor, Read};
 use std::time::Duration;
 
 #[derive(Serialize)]
@@ -21,7 +22,7 @@ pub fn index() -> &'static str {
     std::thread::sleep(Duration::from_millis(100));
     "Hello, world!"
 }
-/*
+
 #[get("/json")]
 pub fn json() -> Json<Task> {
     Json(Task {
@@ -34,7 +35,7 @@ pub fn json() -> Json<Task> {
 #[get("/big-json")]
 pub fn big_json() -> Json<Vec<Task>> {
     let mut v: Vec<Task> = Vec::new();
-    for i in 0..100_000 {
+    for i in 1..=100_000 {
         v.push(Task {
             id: i,
             name: "Coucou ceci est mon nom",
@@ -51,6 +52,7 @@ pub fn time_now() -> String {
     now.to_rfc3339_opts(SecondsFormat::Secs, true)
 }
 
+/*
 #[derive(Serialize, Debug)]
 pub struct User {
     pub id: u32,
@@ -139,20 +141,20 @@ pub fn big_json_stream() -> Result<UsersStream, ()> {
         pending: Cursor::new(vec![]),
     })
 }
+*/
 
 #[cfg(test)]
 mod test {
     use crate::rocket;
     use rocket::http::Status;
-    use rocket::local::Client;
+    use rocket::local::blocking::Client;
 
     #[test]
     fn test_index() {
-        let client = Client::new(crate::rocket()).unwrap();
-        let mut response = client.get("/").dispatch();
+        let client = Client::tracked(rocket()).expect("valid rocket instance");
+        let response = client.get("/").dispatch();
 
         assert_eq!(response.status(), Status::Ok);
-        assert_eq!(response.body_string(), Some("Hello, world!".into()));
+        assert_eq!(response.into_string(), Some("Hello, world!".into()));
     }
 }
-*/
